@@ -1,0 +1,32 @@
+.form-control:focus {
+  box-shadow: none;
+}
+
+.list-group {
+  overflow-y: scroll;
+  height: 200px;
+  /* Track */
+  /* Handle */
+  /* Handle on hover */
+}
+.list-group::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.list-group::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+.list-group::-webkit-scrollbar-thumb {
+  background: #3498db;
+  border-radius: 4px;
+}
+.list-group::-webkit-scrollbar-thumb:hover {
+  background: #2980b9;
+}
+.list-group .list-group-item {
+  padding: 0.3rem 0.6rem;
+  display: inline-block;
+  margin: 0.15rem 0rem;
+  border-radius: 20px;
+}
