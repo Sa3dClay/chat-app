@@ -3,8 +3,10 @@
         <li :class="className">
             <slot></slot>
         </li>
-        <small>
-            <span class="badge bg-danger text-white">You</span>
+        <small class="userName">
+            <span class="badge bg-info text-white">
+                {{ username }}
+            </span>
         </small>
     </div>
 </template>
@@ -13,7 +15,8 @@
     export default {
         props: [
             'bgcolor',
-            'textcolor'
+            'textcolor',
+            'username'
         ],
         computed: {
             className() {

@@ -25,8 +25,18 @@
   background: #2980b9;
 }
 .list-group .list-group-item {
-  padding: 0.3rem 0.6rem;
+  padding: 0.33rem 0.66rem;
   display: inline-block;
-  margin: 0.15rem 0rem;
+  margin: 0.2rem 0rem;
   border-radius: 20px;
+}
+
+.userName {
+  position: relative;
+}
+.userName .badge {
+  position: absolute;
+  padding: 0.33rem;
+  margin: 0.4rem;
+  bottom: -20px;
 }

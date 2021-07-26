@@ -7,13 +7,15 @@
             <ul class="list-group" v-chat-scroll>
                 <message-component
                     v-for="(message, index) in chat.messages"
-                    bgColor="primary"
+                    :username=chat.users[index]
+                    :bgColor=chat.colors[index]
                     textColor="white"
                     :key="index"
                 >
                     @{{ message }}
                 </message-component>
             </ul>
+
             <input
                 type="text"
                 id="message"
