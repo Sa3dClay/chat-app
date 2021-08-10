@@ -5,7 +5,7 @@
         </li>
         <small class="userName">
             <span class="badge bg-info text-white">
-                {{ username }}
+                {{ username + ' at ' + time }}
             </span>
         </small>
     </div>
@@ -16,7 +16,8 @@
         props: [
             'bgcolor',
             'textcolor',
-            'username'
+            'username',
+            'time'
         ],
         computed: {
             className() {

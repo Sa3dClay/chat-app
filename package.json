@@ -28,6 +28,7 @@
     },
     "dependencies": {
         "bootstrap": "^5.0.2",
+        "v-toaster": "^1.0.3",
         "vue-chat-scroll": "^1.4.0"
     }
 }
