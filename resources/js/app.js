@@ -9,6 +9,7 @@ Vue.use(VueChatScroll)
 
 import Toaster from 'v-toaster'
 import 'v-toaster/dist/v-toaster.css'
+import axios from 'axios'
 Vue.use(Toaster, {timeout: 5000})
 
 Vue.component('message-component', require('./components/MessageComponent.vue').default)
@@ -35,7 +36,8 @@ const app = new Vue({
                 this.chat.times.push(this.getTime())
 
                 axios.post('/send', {
-                    message: this.message
+                    message: this.message,
+                    chat: this.chat
                 })
                     .then( response => {
                         // console.log(response)
@@ -49,24 +51,49 @@ const app = new Vue({
         getTime() {
             let time = new Date()
             return time.getHours() + ':' + time.getMinutes()
-        }
-    },
-    watch: {
-        message() {
-            Echo.private('chat')
+        },
+        getOldMessages() {
+            axios.post('/getOldMessages')
+                .then(res => {
+                    // console.log('old data ', res.data)
+                    if(res.data != null) {
+                        // console.log('old data ', res.data)
+                        this.chat = res.data
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            }
+        },
+        watch: {
+            message() {
+                Echo.private('chat')
                 .whisper('typing', {
                     name: this.message
                 })
-        }
-    },
-    mounted() {
-        Echo.private('chat')
+            }
+        },
+        mounted() {
+            this.getOldMessages()
+            
+            Echo.private('chat')
             .listen('ChatEvent', (e) => {
                 // console.log(e)
                 this.chat.messages.push(e.message)
                 this.chat.colors.push('danger')
                 this.chat.users.push(e.user)
                 this.chat.times.push(this.getTime())
+                
+                axios.post('/storeDataToSession', {
+                    chat: this.chat
+                })
+                    .then(res => {
+                        console.log(res)
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
             })
             .listenForWhisper('typing', (e) => {
                 if(e.name != '') {

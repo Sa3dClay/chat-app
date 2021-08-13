@@ -1883,12 +1883,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var v_toaster__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! v-toaster */ "./node_modules/v-toaster/dist/v-toaster.js");
 /* harmony import */ var v_toaster__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(v_toaster__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var v_toaster_dist_v_toaster_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! v-toaster/dist/v-toaster.css */ "./node_modules/v-toaster/dist/v-toaster.css");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js").default;
 
 
 vue__WEBPACK_IMPORTED_MODULE_1__.default.use((vue_chat_scroll__WEBPACK_IMPORTED_MODULE_0___default()));
+
 
 
 vue__WEBPACK_IMPORTED_MODULE_1__.default.use((v_toaster__WEBPACK_IMPORTED_MODULE_2___default()), {
@@ -1917,8 +1920,9 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
         this.chat.colors.push('primary');
         this.chat.users.push('you');
         this.chat.times.push(this.getTime());
-        axios.post('/send', {
-          message: this.message
+        axios__WEBPACK_IMPORTED_MODULE_4___default().post('/send', {
+          message: this.message,
+          chat: this.chat
         }).then(function (response) {
           // console.log(response)
           _this.message = '';
@@ -1930,6 +1934,19 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
     getTime: function getTime() {
       var time = new Date();
       return time.getHours() + ':' + time.getMinutes();
+    },
+    getOldMessages: function getOldMessages() {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_4___default().post('/getOldMessages').then(function (res) {
+        // console.log('old data ', res.data)
+        if (res.data != null) {
+          // console.log('old data ', res.data)
+          _this2.chat = res.data;
+        }
+      })["catch"](function (error) {
+        console.log(error);
+      });
     }
   },
   watch: {
@@ -1940,39 +1957,48 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
     }
   },
   mounted: function mounted() {
-    var _this2 = this;
+    var _this3 = this;
 
+    this.getOldMessages();
     Echo["private"]('chat').listen('ChatEvent', function (e) {
       // console.log(e)
-      _this2.chat.messages.push(e.message);
+      _this3.chat.messages.push(e.message);
 
-      _this2.chat.colors.push('danger');
+      _this3.chat.colors.push('danger');
 
-      _this2.chat.users.push(e.user);
+      _this3.chat.users.push(e.user);
 
-      _this2.chat.times.push(_this2.getTime());
+      _this3.chat.times.push(_this3.getTime());
+
+      axios__WEBPACK_IMPORTED_MODULE_4___default().post('/storeDataToSession', {
+        chat: _this3.chat
+      }).then(function (res) {
+        console.log(res);
+      })["catch"](function (error) {
+        console.log(error);
+      });
     }).listenForWhisper('typing', function (e) {
       if (e.name != '') {
-        _this2.typing = 'typing...';
+        _this3.typing = 'typing...';
       } else {
-        _this2.typing = '';
+        _this3.typing = '';
       }
     });
     Echo.join('chat').here(function (users) {
       // console.log(users)
-      _this2.nOfUsers = users.length;
+      _this3.nOfUsers = users.length;
     }).joining(function (user) {
-      _this2.$toaster.success(user.name + ' joined the chat room', {
+      _this3.$toaster.success(user.name + ' joined the chat room', {
         timeout: 3000
       });
 
-      _this2.nOfUsers++;
+      _this3.nOfUsers++;
     }).leaving(function (user) {
-      _this2.$toaster.error(user.name + ' leaved the chat room', {
+      _this3.$toaster.error(user.name + ' leaved the chat room', {
         timeout: 3000
       });
 
-      _this2.nOfUsers--;
+      _this3.nOfUsers--;
     }).error(function (error) {
       console.error(error);
     });
