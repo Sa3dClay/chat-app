@@ -1877,39 +1877,40 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vue_chat_scroll__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-chat-scroll */ "./node_modules/vue-chat-scroll/dist/vue-chat-scroll.js");
-/* harmony import */ var vue_chat_scroll__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_chat_scroll__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var v_toaster__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! v-toaster */ "./node_modules/v-toaster/dist/v-toaster.js");
-/* harmony import */ var v_toaster__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(v_toaster__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var v_toaster_dist_v_toaster_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! v-toaster/dist/v-toaster.css */ "./node_modules/v-toaster/dist/v-toaster.css");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue_chat_scroll__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-chat-scroll */ "./node_modules/vue-chat-scroll/dist/vue-chat-scroll.js");
+/* harmony import */ var vue_chat_scroll__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_chat_scroll__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var v_toaster__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! v-toaster */ "./node_modules/v-toaster/dist/v-toaster.js");
+/* harmony import */ var v_toaster__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(v_toaster__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var v_toaster_dist_v_toaster_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! v-toaster/dist/v-toaster.css */ "./node_modules/v-toaster/dist/v-toaster.css");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js").default;
-
-
-vue__WEBPACK_IMPORTED_MODULE_1__.default.use((vue_chat_scroll__WEBPACK_IMPORTED_MODULE_0___default()));
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_1__.default.use((v_toaster__WEBPACK_IMPORTED_MODULE_2___default()), {
+vue__WEBPACK_IMPORTED_MODULE_2__.default.use((vue_chat_scroll__WEBPACK_IMPORTED_MODULE_1___default()));
+
+vue__WEBPACK_IMPORTED_MODULE_2__.default.use((v_toaster__WEBPACK_IMPORTED_MODULE_3___default()), {
   timeout: 5000
 });
-vue__WEBPACK_IMPORTED_MODULE_1__.default.component('message-component', __webpack_require__(/*! ./components/MessageComponent.vue */ "./resources/js/components/MessageComponent.vue").default);
-var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
+
+vue__WEBPACK_IMPORTED_MODULE_2__.default.component('message-component', __webpack_require__(/*! ./components/MessageComponent.vue */ "./resources/js/components/MessageComponent.vue").default);
+var app = new vue__WEBPACK_IMPORTED_MODULE_2__.default({
   el: '#app',
-  data: {
-    message: '',
-    typing: '',
-    nOfUsers: 0,
-    chat: {
-      messages: [],
-      colors: [],
-      users: [],
-      times: []
-    }
+  data: function data() {
+    return {
+      message: '',
+      typing: '',
+      nOfUsers: 0,
+      chat: {
+        messages: [],
+        colors: [],
+        users: [],
+        times: []
+      }
+    };
   },
   methods: {
     sendMessage: function sendMessage() {
@@ -1920,7 +1921,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
         this.chat.colors.push('primary');
         this.chat.users.push('you');
         this.chat.times.push(this.getTime());
-        axios__WEBPACK_IMPORTED_MODULE_4___default().post('/send', {
+        axios__WEBPACK_IMPORTED_MODULE_0___default().post('/send', {
           message: this.message,
           chat: this.chat
         }).then(function (response) {
@@ -1938,9 +1939,9 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
     getOldMessages: function getOldMessages() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_4___default().post('/getOldMessages').then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get('/getOldMessages').then(function (res) {
         // console.log('old data ', res.data)
-        if (res.data != null) {
+        if (res.data) {
           // console.log('old data ', res.data)
           _this2.chat = res.data;
         }
@@ -1970,7 +1971,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
 
       _this3.chat.times.push(_this3.getTime());
 
-      axios__WEBPACK_IMPORTED_MODULE_4___default().post('/storeDataToSession', {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post('/storeDataToSession', {
         chat: _this3.chat
       }).then(function (res) {
         console.log(res);
@@ -2051,7 +2052,14 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__.default({
   key: "f0d2e91ca89b43079d4e",
   cluster: "eu",
   forceTLS: true
-});
+}); // window.Echo = new Echo({
+//     broadcaster: "pusher",
+//     key: process.env.MIX_PUSHER_APP_KEY,
+//     forceTLS: true,
+//     authEndpoint: "/broadcasting/auth",
+//     authHost: "http://localhost/your-app-name/public",
+//     auth: { headers: { "X-CSRF-Token": "SOME_CSRF_TOKEN" } }
+// });
 
 /***/ }),
 

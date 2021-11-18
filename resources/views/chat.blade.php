@@ -8,6 +8,7 @@
                 Chat Room
                 <span class="badge bg-info">@{{ nOfUsers }}</span>
             </h2>
+            
             <h3 class="badge bg-danger text-white">@{{ typing }}</h3>
 
             <ul class="list-group" v-chat-scroll>
